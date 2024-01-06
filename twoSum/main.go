@@ -11,32 +11,29 @@ func main() {
 
 func twoSum(nums []int, target int) []int {
 	hmap := make(map[int]int)
+
 	for index, num := range nums {
 		hmap[num] = index
 	}
-	sort(nums, 0, len(nums)-1)
-	result := make([]int, 0)
-	val1, val2 := 0, 0
+
+	sort(nums)
 
 	leftPointer := 0
 	rightPointer := len(nums) - 1
 
 	for leftPointer < rightPointer {
 		sum := nums[leftPointer] + nums[rightPointer]
+
 		if sum > target {
 			rightPointer--
 		} else if sum < target {
 			leftPointer++
 		} else {
-			val1 = nums[leftPointer]
-			val2 = nums[rightPointer]
+			return []int{hmap[nums[leftPointer]], hmap[nums[rightPointer]]}
 		}
 	}
 
-	result = append(result, hmap[val1])
-	result = append(result, hmap[val2])
-
-	return result
+	return []int{}
 }
 
 func sort(arr []int, leftIndex, rightIndex int) {
