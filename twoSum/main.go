@@ -3,21 +3,47 @@ package main
 import "fmt"
 
 func main() {
-	nums := []int{1, 2, 3, 4}
+	nums := []int{3, 2, 5, 5, 5, 5, 3, 0}
 	target := 6
 	result := twoSum(nums, target)
 	fmt.Println(result)
 }
 
+// this function checks if there are solutions that include duplicate numbers
+// like [3,3] with target=6
+// this is needed because hashmap doesn't memorize duplicate values of input array
+func checkDuplicates(nums []int, target int) []int {
+	if target%2 == 0 {
+		result := []int{}
+		tmp := target / 2
+		for i := range nums {
+			if nums[i] == tmp {
+				result = append(result, i)
+			}
+		}
+		if len(result) == 2 {
+			return result
+		}
+	}
+	return []int{}
+}
+
 func twoSum(nums []int, target int) []int {
+	//check if duplicate solution exists
+	result := checkDuplicates(nums, target)
+	if len(result) != 0 {
+		return result
+	}
+	//if no duplicate solution, go with hmap
 	hmap := make(map[int]int)
 
 	for index, num := range nums {
 		hmap[num] = index
 	}
 
-	sort(nums)
+	quicksort(nums, 0, len(nums)-1)
 
+	//two-pointer approach
 	leftPointer := 0
 	rightPointer := len(nums) - 1
 
@@ -36,12 +62,12 @@ func twoSum(nums []int, target int) []int {
 	return []int{}
 }
 
-func sort(arr []int, leftIndex, rightIndex int) {
+func quicksort(arr []int, leftIndex, rightIndex int) {
 	if leftIndex < rightIndex {
 		pivotIndex := partition(arr, leftIndex, rightIndex)
 
-		sort(arr, leftIndex, pivotIndex-1)
-		sort(arr, pivotIndex+1, rightIndex)
+		quicksort(arr, leftIndex, pivotIndex-1)
+		quicksort(arr, pivotIndex+1, rightIndex)
 	}
 }
 
